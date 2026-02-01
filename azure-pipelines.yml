@@ -42,6 +42,7 @@ jobs:
   - script: |
       echo "Stopping and removing any existing containers..."
       docker compose down
+      sleep 5
       echo "Starting container(s)..."
       docker compose up -d
     displayName: 'Stop old containers and start fresh'
