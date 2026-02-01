@@ -1,32 +1,14 @@
 trigger:
   branches:
     include:
-<<<<<<< HEAD
-      - main
-
-pool:
-  name: Default
-  vmImage: ''   # Empty because we’ll use self-hosted
-=======
       - main  # run pipeline when main branch changes
 
 pool:
-  name: Orin-Agents   # use self-hosted ARM64 agent pool
->>>>>>> aed861f (updated with agent config)
+  name: Orin-Agents   # use your self-hosted ARM64 agent pool
 
 jobs:
 - job: BuildDocker
   displayName: Build Docker Container
-<<<<<<< HEAD
-  pool:
-    name: Default
-  steps:
-  - checkout: self
-
-  - script: |
-      docker-compose build
-    displayName: 'Build Docker container using docker-compose'
-=======
   steps:
   - checkout: self    # get code from GitHub
 
@@ -44,4 +26,3 @@ jobs:
       echo "Listing running containers..."
       docker ps
     displayName: 'Verify container is running'
->>>>>>> aed861f (updated with agent config)
