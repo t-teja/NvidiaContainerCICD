@@ -14,12 +14,12 @@ jobs:
 
   - script: |
       echo "Building Docker container..."
-      docker-compose build
-    displayName: 'Build Docker container using docker-compose'
+      docker compose build
+    displayName: 'Build Docker container using docker compose'
 
   - script: |
       echo "Running container for test..."
-      docker-compose up -d
+      docker compose up -d
     displayName: 'Start container for verification'
 
   - script: |
