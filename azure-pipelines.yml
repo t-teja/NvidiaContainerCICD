@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: Default
+  vmImage: ''   # Empty because we’ll use self-hosted
+
+jobs:
+- job: BuildDocker
+  displayName: Build Docker Container
+  pool:
+    name: Default
+  steps:
+  - checkout: self
+
+  - script: |
+      docker-compose build
+    displayName: 'Build Docker container using docker-compose'
