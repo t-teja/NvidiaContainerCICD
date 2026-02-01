@@ -13,14 +13,17 @@ jobs:
   - checkout: self    # get code from GitHub
 
   - script: |
+     
       echo "Building Docker container..."
       docker compose build
     displayName: 'Build Docker container using docker compose'
 
   - script: |
+      echo "Stopping any existing containers-teja"
+      docker compose down 
       echo "Running container for test..."
       docker compose up -d
-    displayName: 'Start container for verification'
+      displayName: 'Start container for verification'
 
   - script: |
       echo "Listing running containers..."
