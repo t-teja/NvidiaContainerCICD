@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    image: jetson-flask:latest
+    container_name: jetson_flask_app
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
