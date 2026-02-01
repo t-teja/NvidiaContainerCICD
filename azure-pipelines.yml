@@ -1,31 +1,55 @@
+# azure-pipelines.yml
 trigger:
   branches:
     include:
-      - main  # run pipeline when main branch changes
+      - main   # Run pipeline on pushes to main branch
 
 pool:
-  name: Orin-Agents   # use your self-hosted ARM64 agent pool
+  name: Orin-Agents   # Self-hosted Jetson Orin agent pool
 
 jobs:
-- job: BuildDocker
-  displayName: Build Docker Container
+- job: BuildAndRunDocker
+  displayName: Build and Run Docker Container
   steps:
-  - checkout: self    # get code from GitHub
 
+  # Step 1: Checkout the code
+  - checkout: self
+
+  # Step 2: Debug Docker environment (optional but recommended)
   - script: |
-     
-      echo "Building Docker container..."
+      echo "Checking Docker installation and PATH..."
+      echo "PATH=$PATH"
+      which docker
+      docker --version
+      docker compose version
+    displayName: 'Verify Docker installation'
+
+  # Step 3: Clean up old containers and dangling images safely
+  - script: |
+      echo "Cleaning up stopped containers..."
+      docker container prune -f
+      echo "Cleaning up dangling images..."
+      docker image prune -f
+    displayName: 'Prune stopped containers and dangling images'
+
+  # Step 4: Build Docker images incrementally
+  - script: |
+      echo "Building Docker image(s) using docker compose..."
       docker compose build
-    displayName: 'Build Docker container using docker compose'
+    displayName: 'Build Docker images'
 
+  # Step 5: Stop and remove any existing containers, then start fresh
   - script: |
-      echo "Stopping any existing containers-teja"
-      docker compose down 
-      echo "Running container for test..."
+      echo "Stopping and removing any existing containers..."
+      docker compose down
+      echo "Starting container(s)..."
       docker compose up -d
-      displayName: 'Start container for verification'
+    displayName: 'Stop old containers and start fresh'
 
+  # Step 6: Verify container is running
   - script: |
       echo "Listing running containers..."
       docker ps
+      echo "Checking Flask container logs (last 10 lines)..."
+      docker compose logs --tail=10
     displayName: 'Verify container is running'
