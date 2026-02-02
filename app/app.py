@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Testing docker prune and down before building and running docker container"
+    return "branch PR deploy test CICD pipeline"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001)
